@@ -1,10 +1,11 @@
-#사용할 Prisma API의 HTTP 엔드포인트
-endpoint : ''
+endpoint: http://localhost:4466
 
-# 데이터 모델을 포함하고 있는 파일의 이름 이 파일을 기반으로 API서버에서 사용할 Prisma Client가 생성됨.
 datamodel: datamodel.prisma
 
-# 생성될 Prisma Client의 언어와 생성 위치 지정
 generate:
   - generator: javascript-client
-    output: ../src/generated/prisma-client
+    output: ../src/generated/prisma-client/
+
+hooks:
+  post-deploy:
+    -prisma generate
