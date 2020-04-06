@@ -143,10 +143,8 @@ export interface ClientConstructor<T> {
 export type LinkOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "description_ASC"
-  | "description_DESC"
+  | "descriprion_ASC"
+  | "descriprion_DESC"
   | "url_ASC"
   | "url_DESC";
 
@@ -181,28 +179,20 @@ export interface LinkWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
+  descriprion?: Maybe<String>;
+  descriprion_not?: Maybe<String>;
+  descriprion_in?: Maybe<String[] | String>;
+  descriprion_not_in?: Maybe<String[] | String>;
+  descriprion_lt?: Maybe<String>;
+  descriprion_lte?: Maybe<String>;
+  descriprion_gt?: Maybe<String>;
+  descriprion_gte?: Maybe<String>;
+  descriprion_contains?: Maybe<String>;
+  descriprion_not_contains?: Maybe<String>;
+  descriprion_starts_with?: Maybe<String>;
+  descriprion_not_starts_with?: Maybe<String>;
+  descriprion_ends_with?: Maybe<String>;
+  descriprion_not_ends_with?: Maybe<String>;
   url?: Maybe<String>;
   url_not?: Maybe<String>;
   url_in?: Maybe<String[] | String>;
@@ -217,15 +207,11 @@ export interface LinkWhereInput {
   url_not_starts_with?: Maybe<String>;
   url_ends_with?: Maybe<String>;
   url_not_ends_with?: Maybe<String>;
+  postedBy?: Maybe<UserWhereInput>;
   AND?: Maybe<LinkWhereInput[] | LinkWhereInput>;
   OR?: Maybe<LinkWhereInput[] | LinkWhereInput>;
   NOT?: Maybe<LinkWhereInput[] | LinkWhereInput>;
 }
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
 
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
@@ -292,19 +278,58 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
+
 export interface LinkCreateInput {
   id?: Maybe<ID_Input>;
-  description: String;
+  descriprion: String;
   url: String;
+  postedBy?: Maybe<UserCreateOneWithoutLinksInput>;
+}
+
+export interface UserCreateOneWithoutLinksInput {
+  create?: Maybe<UserCreateWithoutLinksInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutLinksInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  email: String;
+  password: String;
 }
 
 export interface LinkUpdateInput {
-  description?: Maybe<String>;
+  descriprion?: Maybe<String>;
   url?: Maybe<String>;
+  postedBy?: Maybe<UserUpdateOneWithoutLinksInput>;
+}
+
+export interface UserUpdateOneWithoutLinksInput {
+  create?: Maybe<UserCreateWithoutLinksInput>;
+  update?: Maybe<UserUpdateWithoutLinksDataInput>;
+  upsert?: Maybe<UserUpsertWithoutLinksInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutLinksDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+}
+
+export interface UserUpsertWithoutLinksInput {
+  update: UserUpdateWithoutLinksDataInput;
+  create: UserCreateWithoutLinksInput;
 }
 
 export interface LinkUpdateManyMutationInput {
-  description?: Maybe<String>;
+  descriprion?: Maybe<String>;
   url?: Maybe<String>;
 }
 
@@ -313,55 +338,65 @@ export interface UserCreateInput {
   name: String;
   email: String;
   password: String;
-  links?: Maybe<LinkCreateManyInput>;
+  links?: Maybe<LinkCreateManyWithoutPostedByInput>;
 }
 
-export interface LinkCreateManyInput {
-  create?: Maybe<LinkCreateInput[] | LinkCreateInput>;
+export interface LinkCreateManyWithoutPostedByInput {
+  create?: Maybe<
+    LinkCreateWithoutPostedByInput[] | LinkCreateWithoutPostedByInput
+  >;
   connect?: Maybe<LinkWhereUniqueInput[] | LinkWhereUniqueInput>;
+}
+
+export interface LinkCreateWithoutPostedByInput {
+  id?: Maybe<ID_Input>;
+  descriprion: String;
+  url: String;
 }
 
 export interface UserUpdateInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
-  links?: Maybe<LinkUpdateManyInput>;
+  links?: Maybe<LinkUpdateManyWithoutPostedByInput>;
 }
 
-export interface LinkUpdateManyInput {
-  create?: Maybe<LinkCreateInput[] | LinkCreateInput>;
-  update?: Maybe<
-    | LinkUpdateWithWhereUniqueNestedInput[]
-    | LinkUpdateWithWhereUniqueNestedInput
-  >;
-  upsert?: Maybe<
-    | LinkUpsertWithWhereUniqueNestedInput[]
-    | LinkUpsertWithWhereUniqueNestedInput
+export interface LinkUpdateManyWithoutPostedByInput {
+  create?: Maybe<
+    LinkCreateWithoutPostedByInput[] | LinkCreateWithoutPostedByInput
   >;
   delete?: Maybe<LinkWhereUniqueInput[] | LinkWhereUniqueInput>;
   connect?: Maybe<LinkWhereUniqueInput[] | LinkWhereUniqueInput>;
   set?: Maybe<LinkWhereUniqueInput[] | LinkWhereUniqueInput>;
   disconnect?: Maybe<LinkWhereUniqueInput[] | LinkWhereUniqueInput>;
+  update?: Maybe<
+    | LinkUpdateWithWhereUniqueWithoutPostedByInput[]
+    | LinkUpdateWithWhereUniqueWithoutPostedByInput
+  >;
+  upsert?: Maybe<
+    | LinkUpsertWithWhereUniqueWithoutPostedByInput[]
+    | LinkUpsertWithWhereUniqueWithoutPostedByInput
+  >;
   deleteMany?: Maybe<LinkScalarWhereInput[] | LinkScalarWhereInput>;
   updateMany?: Maybe<
     LinkUpdateManyWithWhereNestedInput[] | LinkUpdateManyWithWhereNestedInput
   >;
 }
 
-export interface LinkUpdateWithWhereUniqueNestedInput {
+export interface LinkUpdateWithWhereUniqueWithoutPostedByInput {
   where: LinkWhereUniqueInput;
-  data: LinkUpdateDataInput;
+  data: LinkUpdateWithoutPostedByDataInput;
 }
 
-export interface LinkUpdateDataInput {
-  description?: Maybe<String>;
+export interface LinkUpdateWithoutPostedByDataInput {
+  descriprion?: Maybe<String>;
   url?: Maybe<String>;
 }
 
-export interface LinkUpsertWithWhereUniqueNestedInput {
+export interface LinkUpsertWithWhereUniqueWithoutPostedByInput {
   where: LinkWhereUniqueInput;
-  update: LinkUpdateDataInput;
-  create: LinkCreateInput;
+  update: LinkUpdateWithoutPostedByDataInput;
+  create: LinkCreateWithoutPostedByInput;
 }
 
 export interface LinkScalarWhereInput {
@@ -379,28 +414,20 @@ export interface LinkScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
+  descriprion?: Maybe<String>;
+  descriprion_not?: Maybe<String>;
+  descriprion_in?: Maybe<String[] | String>;
+  descriprion_not_in?: Maybe<String[] | String>;
+  descriprion_lt?: Maybe<String>;
+  descriprion_lte?: Maybe<String>;
+  descriprion_gt?: Maybe<String>;
+  descriprion_gte?: Maybe<String>;
+  descriprion_contains?: Maybe<String>;
+  descriprion_not_contains?: Maybe<String>;
+  descriprion_starts_with?: Maybe<String>;
+  descriprion_not_starts_with?: Maybe<String>;
+  descriprion_ends_with?: Maybe<String>;
+  descriprion_not_ends_with?: Maybe<String>;
   url?: Maybe<String>;
   url_not?: Maybe<String>;
   url_in?: Maybe<String[] | String>;
@@ -426,7 +453,7 @@ export interface LinkUpdateManyWithWhereNestedInput {
 }
 
 export interface LinkUpdateManyDataInput {
-  description?: Maybe<String>;
+  descriprion?: Maybe<String>;
   url?: Maybe<String>;
 }
 
@@ -464,34 +491,92 @@ export interface NodeNode {
 
 export interface Link {
   id: ID_Output;
-  createdAt: DateTimeOutput;
-  description: String;
+  descriprion: String;
   url: String;
 }
 
 export interface LinkPromise extends Promise<Link>, Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
+  descriprion: () => Promise<String>;
   url: () => Promise<String>;
+  postedBy: <T = UserPromise>() => T;
 }
 
 export interface LinkSubscription
   extends Promise<AsyncIterator<Link>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
+  descriprion: () => Promise<AsyncIterator<String>>;
   url: () => Promise<AsyncIterator<String>>;
+  postedBy: <T = UserSubscription>() => T;
 }
 
 export interface LinkNullablePromise
   extends Promise<Link | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
+  descriprion: () => Promise<String>;
   url: () => Promise<String>;
+  postedBy: <T = UserPromise>() => T;
+}
+
+export interface User {
+  id: ID_Output;
+  name: String;
+  email: String;
+  password: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  links: <T = FragmentableArray<Link>>(args?: {
+    where?: LinkWhereInput;
+    orderBy?: LinkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  links: <T = Promise<AsyncIterator<LinkSubscription>>>(args?: {
+    where?: LinkWhereInput;
+    orderBy?: LinkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  links: <T = FragmentableArray<Link>>(args?: {
+    where?: LinkWhereInput;
+    orderBy?: LinkOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface LinkConnection {
@@ -569,65 +654,6 @@ export interface AggregateLinkSubscription
   extends Promise<AsyncIterator<AggregateLink>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface User {
-  id: ID_Output;
-  name: String;
-  email: String;
-  password: String;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  links: <T = FragmentableArray<Link>>(args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  links: <T = Promise<AsyncIterator<LinkSubscription>>>(args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  links: <T = FragmentableArray<Link>>(args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
 export interface UserConnection {
@@ -727,8 +753,7 @@ export interface LinkSubscriptionPayloadSubscription
 
 export interface LinkPreviousValues {
   id: ID_Output;
-  createdAt: DateTimeOutput;
-  description: String;
+  descriprion: String;
   url: String;
 }
 
@@ -736,8 +761,7 @@ export interface LinkPreviousValuesPromise
   extends Promise<LinkPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
+  descriprion: () => Promise<String>;
   url: () => Promise<String>;
 }
 
@@ -745,8 +769,7 @@ export interface LinkPreviousValuesSubscription
   extends Promise<AsyncIterator<LinkPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
+  descriprion: () => Promise<AsyncIterator<String>>;
   url: () => Promise<AsyncIterator<String>>;
 }
 
@@ -805,16 +828,6 @@ The `ID` scalar type represents a unique identifier, often used to refetch an ob
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
-
-/*
-DateTime scalar input type, allowing Date
-*/
-export type DateTimeInput = Date | string;
-
-/*
-DateTime scalar output type, which is always a string
-*/
-export type DateTimeOutput = string;
 
 /*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
