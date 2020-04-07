@@ -1,9 +1,10 @@
-const { GraphQLServer } = require('../node_modules/graphql-yoga/dist');
+const { GraphQLServer } = require('graphql-yoga')
 const { prisma } = require('./generated/prisma-client');
-const Query = require('./resolvers/Query')
-const Mutation = require('./resolvers/Mutation')
-const User = require('./resolvers/User')
-const Link = require('./resolvers/Link')
+const Query = require('./resolvers/Query.js')
+const Mutation = require('./resolvers/Mutation.js')
+const User = require('./resolvers/User.js')
+const Link = require('./resolvers/Link.js')
+const Subscription = require('./resolvers/Subscription')
 
 //links변수는 실행 시간 중에 각 링크들을 저장하는 데에 사용되는 변수입니다. 현재로서는 모든 것이 데이터베이스가 아니라 메모리 상에 저장됨
 
@@ -12,6 +13,7 @@ const Link = require('./resolvers/Link')
 const resolvers = {
     Query,
     Mutation,
+    Subscription,
     User,
     Link    
 }
@@ -19,11 +21,11 @@ const resolvers = {
 const server = new GraphQLServer({
     typeDefs: './src/schema.graphql',
     resolvers,
-    context: request =>{
-        return{
-            ...request,
-            prisma,
-        }
+    context: request => {
+      return {
+        ...request,
+        prisma,
+      }
     },
-})
+  })
 server.start(()=> console.log(`http://localhost:4000에서 서버 가동중`))
